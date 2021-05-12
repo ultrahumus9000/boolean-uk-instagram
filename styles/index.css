@@ -94,6 +94,8 @@ textarea {
 
 .post {
   min-height: 240px;
+  display: grid;
+  margin-top: 20px;
 }
 
 .post > * + *,
@@ -228,6 +230,22 @@ textarea {
   margin-left: 0;
 }
 
+.action-btns button {
+  width: 100px;
+  padding: 5px 10px;
+  color: black;
+  background: linear-gradient(45deg, lightblue, aqua);
+  border-radius: 20px;
+  border: none;
+}
+
+.action-btns button:hover {
+  background: darksalmon;
+  color: #bbdefb;
+}
+.action-btns button:active {
+  filter: invert(2);
+}
 /* FEED SECTION */
 
 .feed {
@@ -237,7 +255,20 @@ textarea {
 .stack > * + * {
   margin-top: 1rem;
 }
-
+.post {
+  display: grid;
+  justify-content: center;
+}
+.post--image {
+  display: grid;
+  place-items: center;
+  border: 2px solid pink;
+}
+.post--image img {
+  height: 300px;
+  width: 100%;
+  object-fit: cover;
+}
 /* CREATE POST SECTION */
 
 #create-comment-form {
