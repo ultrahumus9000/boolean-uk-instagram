@@ -62,9 +62,10 @@
       "comments": [],
       "id": 4
     },
+    
     {
       "title": "business analyst",
-      "content": "fghnj",
+      "content": "cdvfbn",
       "image": {
         "src": "https://images.pexels.com/photos/7480003/pexels-photo-7480003.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
         "alt": "a tree in blossom"
@@ -72,7 +73,7 @@
       "likes": 0,
       "userId": 3,
       "comments": [],
-      "id": 5
+      "id": 7
     }
   ],
   "comments": [
@@ -126,27 +127,9 @@
     },
     {
       "content": "which user",
-      "userId": 1,
-      "postId": 1,
-      "id": 12
-    },
-    {
-      "content": "which user",
-      "userId": 3,
-      "postId": 2,
-      "id": 13
-    },
-    {
-      "content": "which user",
       "userId": 2,
       "postId": 3,
       "id": 14
-    },
-    {
-      "content": "which user",
-      "userId": 3,
-      "postId": 4,
-      "id": 15
     }
   ]
 }
