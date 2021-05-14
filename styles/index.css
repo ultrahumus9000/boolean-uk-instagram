@@ -180,6 +180,7 @@ textarea {
   border-top: 1px solid #bdbdbd;
   border-bottom: 1px solid #bdbdbd;
   background-color: #f5f5f5;
+  position: relative;
 }
 
 /* CREATE POST SECTION */
@@ -255,20 +256,7 @@ textarea {
 .stack > * + * {
   margin-top: 1rem;
 }
-.post {
-  display: grid;
-  justify-content: center;
-}
-.post--image {
-  display: grid;
-  place-items: center;
-  border: 2px solid pink;
-}
-.post--image img {
-  height: 300px;
-  width: 100%;
-  object-fit: cover;
-}
+
 /* CREATE POST SECTION */
 
 #create-comment-form {
@@ -284,4 +272,29 @@ textarea {
 
   font-size: 0.725rem;
   font-weight: bold;
+}
+.avatar-small img {
+  height: 20px;
+  width: 20px;
+  object-fit: cover;
+}
+.post {
+  display: grid;
+  justify-content: center;
+}
+.post--image {
+  display: grid;
+  place-items: center;
+}
+.post--image img {
+  height: 300px;
+  width: 100%;
+  object-fit: cover;
+}
+.commentforp {
+  max-width: 26ch;
+}
+.deletebtn {
+  position: absolute;
+  right: 5px;
 }

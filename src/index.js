@@ -1,10 +1,9 @@
 
 let root = document.querySelector('#root')
+let users = []
+let posts = []
 
-// header part
-let header = document.createElement('header')
-header.setAttribute('class','main-header')
-
+// header part add single user account then addusersaccount then create a header also pass the userinfo
 function getusersinfo(){
      return fetch('http://localhost:3000/users')
             .then(function(resp){
@@ -12,20 +11,37 @@ function getusersinfo(){
             })
 }
 
-function createheader(){
-    getusersinfo()
-    .then(function(users){
-        adduseraccount(users)
-    })
-
+function getpostinfo(){
+    return fetch('http://localhost:3000/posts')
+            .then(function(resp){
+                return resp.json()
+            })
 }
 
-createheader()
+function createheader(){
+    let wrapper = document.createElement('div')
+    wrapper.setAttribute('class','wrapper')
+    let header = document.createElement('header')
+    header.append(wrapper)
+    header.setAttribute('class','main-header')
+    root.append(header)
+    getusersinfo()
+    .then(function(usersfromserver){
+        users = usersfromserver
+        adduseraccount(users)
+    })
+} 
 
 function adduseraccount(users){
-let wrapper = document.createElement('div')
-wrapper.setAttribute('class','wrapper')
+    let wrapper = document.querySelector('.wrapper')
     for( const user of users){
+       let chipactive =  addsinglesuer(user)
+       wrapper.append(chipactive)
+    }
+    
+} 
+
+function addsinglesuer(user){
     let chipactive = document.createElement('div')
     chipactive.setAttribute('class','chip')
     chipactive.classList.add('active')
@@ -39,84 +55,21 @@ wrapper.setAttribute('class','wrapper')
     // variable
     namespan.innerText = user.username
     chipactive.append(avatar,namespan)
-    wrapper.append(chipactive)
-    } 
-
-header.append(wrapper)
+    return chipactive
 }
 
-
-
-
-/* <header class="main-header">
-  <div class="wrapper">
-    <div class="chip active">
-      <div class="avatar-small">
-        <img
-          src="https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg"
-          alt="Salvador Dali"
-        />
-      </div>
-      <span>Salvador Dali</span>
-    </div>
-    <div class="chip">
-      <div class="avatar-small">
-        <img
-          src="https://www.sartle.com/sites/default/files/images/artist/pablo-picasso-137216-5115406.jpg"
-          alt="Picasso"
-        />
-      </div>
-      <span>Picasso</span>
-    </div>
-    <div class="chip">
-      <div class="avatar-small">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3K588mpXWsXuFcE26ZsuTRN2IeFeKCub8hA&amp;usqp=CAU"
-          alt="Van Gogh"
-        />
-      </div>
-      <span>Van Gogh</span>
-    </div>
-  </div>
-</header> */
-
-/* <main class="wrapper">
-  <section class="create-post-section">
-    <!-- Go to create-post-section.html for the template -->
-  </section>
-  <section class="feed">
-    <!-- Go to feed.html for the template -->
-  </section>
-</main> */
-
-
+function createmain(){
 let main = document.createElement('main')
 main.setAttribute('class','wrapper')
+let createpostsection = createpostform() 
+let feedsection = createfeed(posts)
+main.append(createpostsection,feedsection)
+root.append(main)
+}
+
+function createpostform(){
 let createpostsection = document.createElement('section')
 createpostsection.setAttribute('class','create-post-section')
-
-/* <section class="create-post-section">
-  <form id="create-post-form" autocomplete="off">
-    <h2>Create a post</h2>
-    <label for="image">Image</label>
-    <input id="image" name="image" type="text" />
-    <label for="title">Title</label>
-    <input id="title" name="title" type="text" />
-    <label for="content">Content</label>
-    <textarea id="content" name="content" rows="2" columns="30"></textarea>
-    <div class="action-btns">
-      <button id="preview-btn" type="button">Preview</button>
-      <button type="submit">Post</button>
-    </div>
-  </form>
-  <!-- FOR THE CHALLENGE START -->
-  <div class="post">
-    <!-- Go to post.html and scroll down to the preveiw cards -->
-  </div>
-  <!-- FOR THE CHALLENGE END -->
-</section> */
-
-
 let formel = document.createElement('form')
 formel.setAttribute('class','create-post-form')
 formel.setAttribute('id','create-post-form')
@@ -131,7 +84,6 @@ inputimage.setAttribute('class','image-name')
 inputimage.setAttribute('id','image')
 inputimage.setAttribute('name','image')
 inputimage.setAttribute('type','text')
-
 let labeltext = document.createElement('label')
 labeltext.setAttribute('for','title')
 labeltext.innerText = 'Title'
@@ -157,218 +109,295 @@ let previewbutton = document.createElement('button')
 previewbutton.setAttribute('class','preview-btn')
 previewbutton.setAttribute('id','preview-btn')
 previewbutton.innerText = 'Preview'
+previewbutton.setAttribute('type','submit')
 let postbutton = document.createElement('button')
 postbutton.setAttribute('class','postbutton')
 postbutton.setAttribute('type','submit')
 postbutton.innerText = 'Post'
 buttondiv.append(previewbutton, postbutton)
 formel.append(formtitle,labelimage,inputimage,labeltext,inputtext,labelcontent,textareael,buttondiv)
-createpostsection.append(formel) 
+let useridvalue = 2
 
-let feedsection = document.createElement('section')
-feedsection.setAttribute('class','feed')
+/* <div class="post">
+  <div class="chip active">
+    <div class="avatar-small">
+      <img
+        src="https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg"
+        alt="Salvador Dali"
+      />
+    </div>
+    <span>Salvador Dali</span>
+  </div>
+  <div class="post--image loading-state"></div>
+  <div class="post--content">
+    <h2 class="loading-state"></h2>
+    <p class="loading-state"></p>
+  </div>
+</div> */
 
-/* <section class="feed">
-  <ul class="stack">
-    <li class="post">
-      <div class="chip active">
-        <div class="avatar-small">
-          <img
-            src="https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg"
-            alt="Salvador Dali"
-          />
-        </div>
-        <span>Salvador Dali</span>
-      </div>
+let previewcard = document.createElement('div')
+previewcard.setAttribute('class','post')
+let user = {
+    "username": "Salvador Dali",
+    "avatar": "https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg"
+}
+let previewheader = addsinglesuer(user)
 
-      <div class="post--image">
-        <img
-          src="https://images.unsplash.com/photo-1616745309504-0cb79e9ae590?ixid=MXwxMjA3fDB8MHx0b3BpYy1mZWVkfDI0fDZzTVZqVExTa2VRfHxlbnwwfHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60"
-          alt="undefined"
-        />
-      </div>
+let loadingdiv = document.createElement('div')
+loadingdiv.setAttribute('class','post--image loading-state')
 
-      <div class="post--content">
-        <h2>A tree in blossom</h2>
-        <p>Spring is finally here... I just love the colours.</p>
-      </div>
+let previewcontent = document.createElement('div')
+previewcontent.setAttribute('class','post--content')
 
-      <div class="post--comments">
-        <h3>Comments</h3>
-        <div class="post--comment">
-          <div class="avatar-small">
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3K588mpXWsXuFcE26ZsuTRN2IeFeKCub8hA&amp;usqp=CAU"
-              alt="Van Gogh"
-            />
-          </div>
-          <p>What a great photo!!</p>
-        </div>
+let loadingtitle = document.createElement('h2')
+loadingtitle.setAttribute('class','loading-state')
 
-        <div class="post--comment">
-          <div class="avatar-small">
-            <img
-              src="https://www.sartle.com/sites/default/files/images/artist/pablo-picasso-137216-5115406.jpg"
-              alt="Picasso"
-            />
-          </div>
-          <p>So beautiful... perfect!</p>
-        </div>
-        <form id="create-comment-form" autocomplete="off">
-          <label for="comment">Add comment</label>
-          <input id="comment" name="comment" type="text" />
-          <button type="submit">Comment</button>
-        </form>
-      </div>
-    </li>
-    <!-- More <li class="post"> -->
-  </ul>
-</section> */
+let loadingtext = document.createElement('p')
+loadingtext.setAttribute('class','loading-state')
 
-let ulFeedList = document.createElement('ul')
-ulFeedList.setAttribute('class','stack')
+previewcontent.append(loadingtitle,loadingtext)
 
-// let post = {
-//     id: 1,
-//     title: "A tree in blossom",
-//     content: "Spring is finally here... I just love the colours.",
-//     image: {
-//       "src": "https://images.unsplash.com/photo-1616745309504-0cb79e9ae590?ixid=MXwxMjA3fDB8MHx0b3BpYy1mZWVkfDI0fDZzTVZqVExTa2VRfHxlbnwwfHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-//       "alt": "a tree in blossom"
-//     },
-//     likes: 0,
-//     userId: 1,
-//     comments: [
-//       {
-//         "id": 1,
-//         "content": "What a great photo!!",
-//         "userId": 3,
-//         "postId": 1
-//       },
-//       {
-//         "id": 2,
-//         "content": "So beautiful... perfect!",
-//         "userId": 2,
-//         "postId": 1
-//       }
-//     ]}
+previewcard.append(previewheader,loadingdiv,previewcontent)
+
+previewbutton.addEventListener('submit',function(event){
+
+//     <div class="post">
+//   <div class="chip active">
+//     <div class="avatar-small">
+//       <img
+//         src="https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg"
+//         alt="Salvador Dali"
+//       />
+//     </div>
+//     <span>Salvador Dali</span>
+//   </div>
+//   <div class="post--image">
+//     <img
+//       src="https://images.unsplash.com/photo-1620447875063-19be4e4604bc?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8NnNNVmpUTFNrZVF8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60"
+//       alt="Talk about standing out!"
+//     />
+//   </div>
+//   <div class="post--content">
+//     <h2>Talk about standing out!</h2>
+//     <p>What an amazing way to stand out in nature, beautiful colours!</p>
+//   </div>
+// </div>
+
+})
 
 
-let liFeedList = document.createElement('li')
-liFeedList.setAttribute('class','post')
-
-let users = getusersinfo()
-
-
-let divChipActive = document.createElement('div')
-divChipActive.setAttribute('class','chip')
-divChipActive.classList.add("active")
-let divAvatarSmall = document.createElement('div')
-divAvatarSmall.setAttribute('class','avatar-small')
-
-let imageFeed = document.createElement('img')
-// variable
-imageFeed.setAttribute('src', 'https://images.pexels.com/photos/5738030/pexels-photo-5738030.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500')
-imageFeed.setAttribute('alt','username')
-
-let nameSpan = document.createElement('span')
-nameSpan.setAttribute('class','stack')
-// variable
-nameSpan.innerText = 1
-divAvatarSmall.append(imageFeed)
-divChipActive.append(divAvatarSmall, nameSpan)
-
-
-
-let divPostimage = document.createElement('div')
-divPostimage.setAttribute('class','post--image')
-
-let imgContent = document.createElement('img')
-// Variable
-imgContent.setAttribute('src','')
-
-divPostimage.append(imgContent)
-
-
-let divPostContent = document.createElement('div')
-divPostContent.setAttribute('class','post--content')
-
-let h2Content = document.createElement('h2')
-// Variable
-h2Content.innerText = 1
-let pContent = document.createElement('p')
-// variable
-pContent.innerText = 1
-divPostContent.append(h2Content,pContent)
-
-/* <div class="post--comments">
-        <h3>Comments</h3>
-        <div class="post--comment">
-          <div class="avatar-small">
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3K588mpXWsXuFcE26ZsuTRN2IeFeKCub8hA&amp;usqp=CAU"
-              alt="Van Gogh"
-            />
-         </div>
-        <p>What a great photo!!</p>   
-     </div> */
-
-let divguestcomments = document.createElement('div')
-divguestcomments.setAttribute('class','post--comments')
-     
-let h3Comment = document.createElement('h3')
- // Variable
- h3Comment.innerText = 'Comments'
- let guestcomment = document.createElement('div')
- guestcomment.setAttribute('class','post--comment') 
-
- let guestdivimage = document.createElement('div')
- guestdivimage.setAttribute('class','avatar-small') 
-
- let guestimage = document.createElement('img')
-//  variable
- guestimage.setAttribute('src',' ') 
- guestdivimage.append(guestimage)
- guestcomment.append(guestdivimage)
- let pComment = document.createElement('p')
- // variable
- pComment.innerText = 1
- divguestcomments.append(h3Comment,guestcomment,pComment)   
-
-let comentform = document.createElement('form')
-comentform.setAttribute('id','create-comment-form')
-comentform.setAttribute('autocomplete','off')
-
-let addcommentlabel = document.createElement('label')
-addcommentlabel.setAttribute('for','comment')
-addcommentlabel.innerText = 'Add comment'
-
-let inputcomment = document.createElement('input')
-inputcomment.setAttribute('id','comment')
-inputcomment.setAttribute('name','comment')
-inputcomment.setAttribute('type','text')
-// variable
-inputcomment.innerText = 1
-
-let submitbtn = document.createElement('button')
-submitbtn.setAttribute('type','submit')
-submitbtn.innerText = 'Comment'
-comentform.append(addcommentlabel,inputcomment,submitbtn)
-/* <form id="create-comment-form" autocomplete="off">
-<label for="comment">Add comment</label>
-<input id="comment" name="comment" type="text" />
-<button type="submit">Comment</button>
-</form> */
-
-liFeedList.append(divChipActive,divPostimage,divPostContent,divguestcomments,comentform)
+createpostsection.append(formel,previewcard) 
+formel.addEventListener('submit', function(event){
+event.preventDefault()
+useridvalue++
+post = 
+{
+  "title": inputtext.value,
+  "content": textareael.value,
+  "image": {
+    "src": inputimage.value,
+    "alt": "a tree in blossom"
+  },
+  "likes": 0,
+  "userId": useridvalue,
+  "comments": [ ]
+}
+let liFeedList = createsinglepost(post)
+ulFeedList = document.querySelector('ul')
 ulFeedList.append(liFeedList)
 
+function addnewpostdata(){
+    fetch(`http://localhost:3000/posts`,{
+        method:'POST',
+        headers: {'Content-Type':"application/json"},
+        body: JSON.stringify({
+            "title": inputtext.value,
+            "content": textareael.value,
+            "image": {
+                "src": inputimage.value,
+                "alt": "a tree in blossom"
+            },
+            "likes": 0,
+            "userId": useridvalue,
+            "comments": [ ]
+            })
+        })
+    }
+addnewpostdata()
+
+formel.reset()
+})
+return createpostsection
+}
+
+/* <section class="create-post-section">
+
+  <!-- FOR THE CHALLENGE START -->
+  <div class="post">
+    <!-- Go to post.html and scroll down to the preveiw cards -->
+  </div>
+  <!-- FOR THE CHALLENGE END -->
+</section> */
+function commentsdisplay(comments){
+    let divguestcomments = document.createElement('div')
+    divguestcomments.setAttribute('class','post--comments')
+    let h3Comment = document.createElement('h3')
+    h3Comment.innerText = 'Comments'
+    divguestcomments.append(h3Comment)
+    for (const comment of comments ){
+        let guestcomment = createcomment(comment)
+        divguestcomments.append(guestcomment)  
+    }
+    return divguestcomments
+}
+function createcomment(comment){
+    let guestcomment = document.createElement('div')
+    guestcomment.setAttribute('class','post--comment') 
+   
+    let guestdivimage = document.createElement('div')
+    guestdivimage.setAttribute('class','avatar-small') 
+   
+    let guestimage = document.createElement('img')
+   //  variable
+    let user = users.find(function(user){
+        return user.id === comment.userId
+    })
+    guestimage.setAttribute('src', user.avatar) 
+    guestdivimage.append(guestimage)
+   
+    let pComment = document.createElement('p')
+    pComment.setAttribute('class','commentforp') 
+    // variable
+    pComment.innerText = comment.content
+
+    let deletebtn = document.createElement('button')
+    deletebtn.setAttribute('class','deletebtn') 
+    deletebtn.innerText = 'Delete'
+    pComment.append(deletebtn)
+    guestcomment.append(guestdivimage,pComment)
+   
+    deletebtn.addEventListener('click', function(){
+        let id = comment.id
+        fetch(`http://localhost:3000/comments/${id}`,{
+            method:'DELETE' 
+        }).then(function(){
+            guestcomment.remove()
+        }
+        )
+        
+    })
+    return guestcomment
+}
+
+function createsinglepost(post){
+    let liFeedList = document.createElement('li')
+    liFeedList.setAttribute('class','post')
+       let user =  users.find(function(user){
+            return user.id === post.userId
+        })
+
+    let divchipactive = addsinglesuer(user)
+        
+    let divPostimage = document.createElement('div')
+    divPostimage.setAttribute('class','post--image')
+    
+    let imgContent = document.createElement('img')
+    // Variable
+    imgContent.setAttribute('src',post.image.src)
+    
+    divPostimage.append(imgContent)
+    
+    let divPostContent = document.createElement('div')
+    divPostContent.setAttribute('class','post--content')
+    
+    let h2Content = document.createElement('h2')
+    // Variable
+    h2Content.innerText = post.title
+    let pContent = document.createElement('p')
+    // variable
+    pContent.innerText = post.content
+    divPostContent.append(h2Content,pContent)
+    
+    let comments = post.comments
+    let divguestcomments = commentsdisplay(comments)
+         
+    let comentform = document.createElement('form')
+    comentform.setAttribute('id','create-comment-form')
+    comentform.setAttribute('autocomplete','off')
+    
+    let addcommentlabel = document.createElement('label')
+    addcommentlabel.setAttribute('for','comment')
+    addcommentlabel.innerText = 'Add comment'
+    
+    let inputcomment = document.createElement('input')
+    inputcomment.setAttribute('id','comment')
+    inputcomment.setAttribute('name','comment')
+    inputcomment.setAttribute('type','text')
+    // variable
+    
+    let submitbtn = document.createElement('button')
+    submitbtn.setAttribute('type','submit')
+    submitbtn.innerText = 'Comment'
+    comentform.append(addcommentlabel,inputcomment,submitbtn)
+
+    comentform.addEventListener('submit',function(event){
+        event.preventDefault()
+        fetch(`http://localhost:3000/comments`,{
+            method:'POST',
+            headers: {'Content-Type':"application/json"},
+            body: JSON.stringify({
+                "content": inputcomment.value,
+                "userId": post.userId,
+                "postId": post.id
+            })
+        }).then(function(){
+            let comment = { 
+                "content": inputcomment.value,
+                "userId": post.userId,
+                "postId": post.id
+            }
+            let guestcomment = createcomment(comment)
+            divguestcomments.append(guestcomment)  
+            comentform.reset()
+        }
+        )
+    })
+    // fetch(`http://localhost:3000/images/${j}`, {
+    //     method:'PATCH',
+    //     headers: {'Content-Type':"application/json"},
+    //     body: JSON.stringify({likes:newlikes})
+    //     })
+    //     .then(function(response){
+    //         return response.json()
+    //     }
 
 
+    liFeedList.append(divchipactive,divPostimage,divPostContent,divguestcomments,comentform)
+    return liFeedList
+}
 
+function createallposts (posts){
+    let ulFeedList = document.createElement('ul')
+    ulFeedList.setAttribute('class','stack')
+    getpostinfo().then(function(postfromserver){
+        posts = postfromserver
+        for(const post of posts){
+            let liFeedList = createsinglepost(post)
+            ulFeedList.append(liFeedList)
+            }
+    })
+    return ulFeedList
+}
+
+function createfeed(posts){
+let feedsection = document.createElement('section')
+feedsection.setAttribute('class','feed')
+let ulFeedList = createallposts (posts)
 feedsection.append(ulFeedList)
+return feedsection
+}
 
-main.append(createpostsection,feedsection)
-root.append(header,main)
+createheader()
+createmain()
 
 
