@@ -142,6 +142,7 @@ previewcard.setAttribute('class','post preview-card')
     
     previewcard.append(previewheader,loadingdiv,previewcontent)
     previewbutton.addEventListener('click',function(event){
+        event.preventDefault()
         loadingtitle.innerText = inputtext.value           
         loadingtext.innerText = textareael.value
         let previewimg = document.createElement('img')
@@ -155,7 +156,7 @@ previewcard.setAttribute('class','post preview-card')
 
 createpostsection.append(formel,previewcard) 
 postbutton.addEventListener('submit', function(event){
-    // event.preventDefault()
+    event.preventDefault()
     useridvalue++
     post = 
     {
