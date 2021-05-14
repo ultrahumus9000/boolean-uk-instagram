@@ -109,7 +109,7 @@ let previewbutton = document.createElement('button')
 previewbutton.setAttribute('class','preview-btn')
 previewbutton.setAttribute('id','preview-btn')
 previewbutton.innerText = 'Preview'
-previewbutton.setAttribute('type','submit')
+// previewbutton.setAttribute('type','submit')
 let postbutton = document.createElement('button')
 postbutton.setAttribute('class','postbutton')
 postbutton.setAttribute('type','submit')
@@ -118,114 +118,81 @@ buttondiv.append(previewbutton, postbutton)
 formel.append(formtitle,labelimage,inputimage,labeltext,inputtext,labelcontent,textareael,buttondiv)
 let useridvalue = 2
 
-/* <div class="post">
-  <div class="chip active">
-    <div class="avatar-small">
-      <img
-        src="https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg"
-        alt="Salvador Dali"
-      />
-    </div>
-    <span>Salvador Dali</span>
-  </div>
-  <div class="post--image loading-state"></div>
-  <div class="post--content">
-    <h2 class="loading-state"></h2>
-    <p class="loading-state"></p>
-  </div>
-</div> */
-
 let previewcard = document.createElement('div')
-previewcard.setAttribute('class','post')
-let user = {
-    "username": "Salvador Dali",
-    "avatar": "https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg"
-}
-let previewheader = addsinglesuer(user)
-
-let loadingdiv = document.createElement('div')
-loadingdiv.setAttribute('class','post--image loading-state')
-
-let previewcontent = document.createElement('div')
-previewcontent.setAttribute('class','post--content')
-
-let loadingtitle = document.createElement('h2')
-loadingtitle.setAttribute('class','loading-state')
-
-let loadingtext = document.createElement('p')
-loadingtext.setAttribute('class','loading-state')
-
-previewcontent.append(loadingtitle,loadingtext)
-
-previewcard.append(previewheader,loadingdiv,previewcontent)
-
-previewbutton.addEventListener('submit',function(event){
-
-//     <div class="post">
-//   <div class="chip active">
-//     <div class="avatar-small">
-//       <img
-//         src="https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg"
-//         alt="Salvador Dali"
-//       />
-//     </div>
-//     <span>Salvador Dali</span>
-//   </div>
-//   <div class="post--image">
-//     <img
-//       src="https://images.unsplash.com/photo-1620447875063-19be4e4604bc?ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8NnNNVmpUTFNrZVF8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60"
-//       alt="Talk about standing out!"
-//     />
-//   </div>
-//   <div class="post--content">
-//     <h2>Talk about standing out!</h2>
-//     <p>What an amazing way to stand out in nature, beautiful colours!</p>
-//   </div>
-// </div>
-
-})
-
+previewcard.setAttribute('class','post preview-card')
+ function createpreviewcard(){
+    let user = {
+        "username": "Salvador Dali",
+        "avatar": "https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg"
+    }
+    let previewheader = addsinglesuer(user)
+    
+    let loadingdiv = document.createElement('div')
+    loadingdiv.setAttribute('class','post--image loading-state')
+    
+    let previewcontent = document.createElement('div')
+    previewcontent.setAttribute('class','post--content')
+    
+    let loadingtitle = document.createElement('h2')
+    loadingtitle.setAttribute('class','loading-state')
+    
+    let loadingtext = document.createElement('p')
+    loadingtext.setAttribute('class','loading-state')
+    previewcontent.append(loadingtitle,loadingtext)
+    
+    previewcard.append(previewheader,loadingdiv,previewcontent)
+    previewbutton.addEventListener('click',function(event){
+        loadingtitle.innerText = inputtext.value           
+        loadingtext.innerText = textareael.value
+        let previewimg = document.createElement('img')
+        previewimg.setAttribute('class','previewimg' )
+        previewimg.setAttribute('src',"https://images.pexels.com/photos/7684196/pexels-photo-7684196.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500")
+        loadingdiv.append(previewimg)
+        formel.reset()                          
+    })
+ }
+ createpreviewcard()
 
 createpostsection.append(formel,previewcard) 
-formel.addEventListener('submit', function(event){
-event.preventDefault()
-useridvalue++
-post = 
-{
-  "title": inputtext.value,
-  "content": textareael.value,
-  "image": {
-    "src": inputimage.value,
-    "alt": "a tree in blossom"
-  },
-  "likes": 0,
-  "userId": useridvalue,
-  "comments": [ ]
-}
-let liFeedList = createsinglepost(post)
-ulFeedList = document.querySelector('ul')
-ulFeedList.append(liFeedList)
-
-function addnewpostdata(){
-    fetch(`http://localhost:3000/posts`,{
-        method:'POST',
-        headers: {'Content-Type':"application/json"},
-        body: JSON.stringify({
-            "title": inputtext.value,
-            "content": textareael.value,
-            "image": {
-                "src": inputimage.value,
-                "alt": "a tree in blossom"
-            },
-            "likes": 0,
-            "userId": useridvalue,
-            "comments": [ ]
-            })
-        })
+postbutton.addEventListener('submit', function(event){
+    // event.preventDefault()
+    useridvalue++
+    post = 
+    {
+    "title": inputtext.value,
+    "content": textareael.value,
+    "image": {
+        "src": inputimage.value,
+        "alt": "a tree in blossom"
+    },
+    "likes": 0,
+    "userId": useridvalue,
+    "comments": [ ]
     }
-addnewpostdata()
+        let liFeedList = createsinglepost(post)
+        ulFeedList = document.querySelector('ul')
+        ulFeedList.append(liFeedList)
 
-formel.reset()
+        function addnewpostdata(){
+            fetch(`http://localhost:3000/posts`,{
+                method:'POST',
+                headers: {'Content-Type':"application/json"},
+                body: JSON.stringify({
+                    "title": inputtext.value,
+                    "content": textareael.value,
+                    "image": {
+                        "src": inputimage.value,
+                        "alt": "a tree in blossom"
+                    },
+                    "likes": 0,
+                    "userId": useridvalue,
+                    "comments": [ ]
+                    })
+                })
+            }
+        addnewpostdata()
+
+    formel.reset()
 })
 return createpostsection
 }
@@ -362,16 +329,7 @@ function createsinglepost(post){
         }
         )
     })
-    // fetch(`http://localhost:3000/images/${j}`, {
-    //     method:'PATCH',
-    //     headers: {'Content-Type':"application/json"},
-    //     body: JSON.stringify({likes:newlikes})
-    //     })
-    //     .then(function(response){
-    //         return response.json()
-    //     }
-
-
+ 
     liFeedList.append(divchipactive,divPostimage,divPostContent,divguestcomments,comentform)
     return liFeedList
 }
