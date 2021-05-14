@@ -149,13 +149,13 @@ previewcard.setAttribute('class','post preview-card')
         previewimg.setAttribute('class','previewimg' )
         previewimg.setAttribute('src',"https://images.pexels.com/photos/7684196/pexels-photo-7684196.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500")
         loadingdiv.append(previewimg)
-        formel.reset()                          
+        // formel.reset()                          
     })
  }
  createpreviewcard()
 
 createpostsection.append(formel,previewcard) 
-postbutton.addEventListener('submit', function(event){
+formel.addEventListener('submit', function(event){
     event.preventDefault()
     useridvalue++
     post = 
@@ -355,6 +355,8 @@ let ulFeedList = createallposts (posts)
 feedsection.append(ulFeedList)
 return feedsection
 }
+
+// getusersinfo().then(function(){})
 
 createheader()
 createmain()
