@@ -62,10 +62,9 @@
       "comments": [],
       "id": 4
     },
-    
     {
       "title": "business analyst",
-      "content": "cdvfbn",
+      "content": "cvbnmnnnnnnnn",
       "image": {
         "src": "https://images.pexels.com/photos/7480003/pexels-photo-7480003.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
         "alt": "a tree in blossom"
@@ -73,7 +72,7 @@
       "likes": 0,
       "userId": 3,
       "comments": [],
-      "id": 7
+      "id": 6
     }
   ],
   "comments": [
@@ -96,12 +95,6 @@
       "postId": 2
     },
     {
-      "id": 5,
-      "content": "What a great photo!!",
-      "userId": 2,
-      "postId": 2
-    },
-    {
       "id": 6,
       "content": "How did you capture that... perfect timing!",
       "userId": 3,
@@ -114,22 +107,46 @@
       "id": 9
     },
     {
-      "content": "fvbn",
-      "userId": 3,
-      "postId": 4,
-      "id": 10
-    },
-    {
-      "content": "cvbnm",
-      "userId": 3,
-      "postId": 4,
-      "id": 11
-    },
-    {
       "content": "which user",
       "userId": 2,
       "postId": 3,
       "id": 14
+    },
+    {
+      "content": "bn",
+      "userId": 1,
+      "postId": 1,
+      "id": 16
+    },
+    {
+      "content": "dcfvbn",
+      "userId": 3,
+      "postId": 6,
+      "id": 17
+    },
+    {
+      "content": "fvbn",
+      "userId": 1,
+      "postId": 1,
+      "id": 18
+    },
+    {
+      "content": "vbn",
+      "userId": 1,
+      "postId": 2,
+      "id": 19
+    },
+    {
+      "content": "cvbn ",
+      "userId": 1,
+      "postId": 1,
+      "id": 20
+    },
+    {
+      "content": "cvbn",
+      "userId": 1,
+      "postId": 6,
+      "id": 21
     }
   ]
 }

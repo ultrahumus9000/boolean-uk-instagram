@@ -1,6 +1,7 @@
 let root = document.querySelector("#root");
 let users = [];
 let posts = [];
+let currentuser = null;
 
 // header part add single user account then addusersaccount then create a header also pass the userinfo
 function getusersinfo() {
@@ -15,6 +16,17 @@ function getpostinfo() {
   });
 }
 
+getusersinfo().then(function (usersFromServer) {
+  // HERE I CAN GUARANTEE THAT USERS ARE BACK
+  users = usersFromServer;
+  getpostinfo().then(function (postsFromServer) {
+    // HERE I CAN GUARANTEE THAT USERS AND POSTS ARE BACK
+    posts = postsFromServer;
+    createheader();
+    createmain();
+  });
+});
+
 function createheader() {
   let wrapper = document.createElement("div");
   wrapper.setAttribute("class", "wrapper");
@@ -22,16 +34,22 @@ function createheader() {
   header.append(wrapper);
   header.setAttribute("class", "main-header");
   root.append(header);
-  getusersinfo().then(function (usersfromserver) {
-    users = usersfromserver;
-    adduseraccount(users);
-  });
+  adduseraccount(users);
 }
 
 function adduseraccount(users) {
   let wrapper = document.querySelector(".wrapper");
   for (const user of users) {
     let chipactive = addsinglesuer(user);
+
+    chipactive.addEventListener("click", function () {
+      currentuser = user;
+      const currentchip = document.querySelector(".active");
+      if (currentchip !== null) {
+        currentchip.classList.remove("active");
+      }
+      chipactive.classList.add("active");
+    });
     wrapper.append(chipactive);
   }
 }
@@ -39,17 +57,18 @@ function adduseraccount(users) {
 function addsinglesuer(user) {
   let chipactive = document.createElement("div");
   chipactive.setAttribute("class", "chip");
-  chipactive.classList.add("active");
-  let avatar = document.createElement("div");
-  avatar.setAttribute("class", "avatar-small");
+  //   chipactive.classList.add("active");
+  let avatardiv = document.createElement("div");
+  avatardiv.setAttribute("class", "avatar-small");
   let headerimg = document.createElement("img");
   // variable
+
   headerimg.setAttribute("src", user.avatar);
-  avatar.append(headerimg);
+  avatardiv.append(headerimg);
   let namespan = document.createElement("span");
   // variable
   namespan.innerText = user.username;
-  chipactive.append(avatar, namespan);
+  chipactive.append(avatardiv, namespan);
   return chipactive;
 }
 
@@ -120,12 +139,12 @@ function createpostform() {
     textareael,
     buttondiv
   );
-  let useridvalue = 2;
 
   let previewcard = document.createElement("div");
   previewcard.setAttribute("class", "post preview-card");
   function createpreviewcard() {
     let user = {
+      id: 1,
       username: "Salvador Dali",
       avatar:
         "https://uploads5.wikiart.org/images/salvador-dali.jpg!Portrait.jpg",
@@ -176,8 +195,11 @@ function createpostform() {
   createpostsection.append(formel, previewcard);
   formel.addEventListener("submit", function (event) {
     event.preventDefault();
-    useridvalue++;
-    post = {
+    if (currentuser === null) {
+      alert("sign in first");
+      return;
+    }
+    const post = {
       title: inputtext.value,
       content: textareael.value,
       image: {
@@ -185,10 +207,12 @@ function createpostform() {
         alt: "a tree in blossom",
       },
       likes: 0,
-      userId: useridvalue,
+      userId: currentuser.id,
       comments: [],
     };
+
     let liFeedList = createsinglepost(post);
+
     ulFeedList = document.querySelector("ul");
     ulFeedList.append(liFeedList);
 
@@ -204,7 +228,7 @@ function createpostform() {
             alt: "a tree in blossom",
           },
           likes: 0,
-          userId: useridvalue,
+          userId: currentuser.id,
           comments: [],
         }),
       });
@@ -216,14 +240,6 @@ function createpostform() {
   return createpostsection;
 }
 
-/* <section class="create-post-section">
-
-  <!-- FOR THE CHALLENGE START -->
-  <div class="post">
-    <!-- Go to post.html and scroll down to the preveiw cards -->
-  </div>
-  <!-- FOR THE CHALLENGE END -->
-</section> */
 function commentsdisplay(comments) {
   let divguestcomments = document.createElement("div");
   divguestcomments.setAttribute("class", "post--comments");
@@ -263,12 +279,16 @@ function createcomment(comment) {
   guestcomment.append(guestdivimage, pComment);
 
   deletebtn.addEventListener("click", function () {
-    let id = comment.id;
-    fetch(`http://localhost:3000/comments/${id}`, {
-      method: "DELETE",
-    }).then(function () {
-      guestcomment.remove();
-    });
+    if (currentuser.id === comment.userId) {
+      // let id = comment.id;
+      fetch(`http://localhost:3000/comments/${[comment.id]}`, {
+        method: "DELETE",
+      }).then(function () {
+        guestcomment.remove();
+      });
+    } else {
+      alert("you dont have permission!!");
+    }
   });
   return guestcomment;
 }
@@ -326,18 +346,22 @@ function createsinglepost(post) {
 
   comentform.addEventListener("submit", function (event) {
     event.preventDefault();
+    if (currentuser === null) {
+      alert("sign in first");
+      return;
+    }
     fetch(`http://localhost:3000/comments`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         content: inputcomment.value,
-        userId: post.userId,
+        userId: currentuser.id,
         postId: post.id,
       }),
     }).then(function () {
       let comment = {
         content: inputcomment.value,
-        userId: post.userId,
+        userId: currentuser.id,
         postId: post.id,
       };
       let guestcomment = createcomment(comment);
@@ -359,13 +383,10 @@ function createsinglepost(post) {
 function createallposts(posts) {
   let ulFeedList = document.createElement("ul");
   ulFeedList.setAttribute("class", "stack");
-  getpostinfo().then(function (postfromserver) {
-    posts = postfromserver;
-    for (const post of posts) {
-      let liFeedList = createsinglepost(post);
-      ulFeedList.append(liFeedList);
-    }
-  });
+  for (const post of posts) {
+    let liFeedList = createsinglepost(post);
+    ulFeedList.append(liFeedList);
+  }
   return ulFeedList;
 }
 
@@ -377,7 +398,4 @@ function createfeed(posts) {
   return feedsection;
 }
 
-// getusersinfo().then(function(){})
-
-createheader();
-createmain();
+// this is ensure that all data was avaliable
